@@ -17,7 +17,7 @@ EOF
 cat << EOF > /etc/ipsec.conf
 config setup 
         charondebug=all 
-        uniqueids=yes 
+        uniqueids=yes
         strictcrlpolicy=no 
 
 conn gateway-A-to-cloud 
@@ -35,4 +35,4 @@ conn gateway-A-to-cloud
 EOF
 
 # Restart ipsec service
-systemctl restart ipsec
+sudo systemctl restart ipsec

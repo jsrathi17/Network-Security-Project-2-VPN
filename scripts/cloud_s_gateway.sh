@@ -7,10 +7,11 @@ route add default gw 172.30.30.1
 iptables -t nat -A POSTROUTING -o enp0s8 -j MASQUERADE
 
 # Forward client A to server-s1
-iptables -A PREROUTING -t nat -p tcp -s 172.16.16.16 -d 172.30.30.30 --dport 8080 -j DNAT --to-destination 192.168.10.2:8888
+iptables -A PREROUTING -t nat -p tcp -s 172.16.16.16 -d 172.30.30.30 --dport 8080 -j DNAT --to-destination 192.168.10.2
 
 # Forward client B to server-s2
-iptables -A PREROUTING -t nat -p tcp -s 172.18.18.18 -d 172.30.30.30 --dport 8080 -j DNAT --to-destination 192.168.10.2:9999
+iptables -A PREROUTING -t nat -p tcp -s 172.18.18.18 -d 172.30.30.30 --dport 8080 -j DNAT --to-destination 192.168.10.3
+
 
 ## Save the iptables rules
 iptables-save > /etc/iptables/rules.v4
@@ -57,4 +58,4 @@ conn gateway-B-to-cloud
 EOF
 
 # Restart ipsec service
-systemctl restart ipsec
+sudo systemctl restart ipsec
