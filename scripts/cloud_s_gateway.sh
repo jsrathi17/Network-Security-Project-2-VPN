@@ -12,6 +12,12 @@ iptables -A PREROUTING -t nat -p tcp -s 172.16.16.16 -d 172.30.30.30 --dport 808
 # Forward client B to server-s2
 iptables -A PREROUTING -t nat -p tcp -s 172.18.18.18 -d 172.30.30.30 --dport 8080 -j DNAT --to-destination 192.168.10.2:9999
 
+# Only accept the packets designated to port 8888 and 9999 and drop all the others
+iptables -t filter -A FORWARD -d 192.168.10.2 -p tcp -j ACCEPT
+iptables -t filter -A FORWARD -s 192.168.10.2 -p tcp -j ACCEPT
+iptables -t filter -A FORWARD -d 192.168.10.2 -p udp -j ACCEPT
+iptables -t filter -A FORWARD -s 192.168.10.2 -p udp -j ACCEPT
+iptables -t filter -P FORWARD DROP
 
 ## Save the iptables rules
 iptables-save > /etc/iptables/rules.v4

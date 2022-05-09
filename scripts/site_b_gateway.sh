@@ -9,6 +9,9 @@ iptables-save > /etc/iptables/rules.v4
 ip6tables-save > /etc/iptables/rules.v6
 
 
+# forward the incoming packets to the old IP, to cloud
+iptables -t nat -A PREROUTING -p tcp -d 10.1.0.99 --dport 8080 -j DNAT --to 172.30.30.30:8080
+
 # Defining pre-shared secrets for authentication
 cat << EOF > /etc/ipsec.secrets
 172.30.30.30 172.18.18.18 : PSK "76C58728629E629F26012A2F52E436B6F413757107C5A8314EC5F1F170DD6471"
@@ -17,7 +20,7 @@ EOF
 # Defining ipsec configuration
 cat << EOF > /etc/ipsec.conf
 config setup 
-        charondebug=all 
+        charondebug=all
         uniqueids=yes 
         strictcrlpolicy=no 
 
@@ -36,4 +39,4 @@ conn gateway-B-to-cloud
 EOF
 
 # Restart ipsec service
-sudo systemctl restart ipsec
+sudo sudsystemctl restart ipsec

@@ -4,6 +4,10 @@
 route add default gw 172.16.16.1
 iptables -t nat -A POSTROUTING -o enp0s8 -j MASQUERADE
 
+# forward the incoming packets to the old IP, to cloud
+iptables -t nat -A PREROUTING -p tcp -d 10.1.0.99 --dport 8080 -j DNAT --to 172.30.30.30:8080
+
+
 ## Save the iptables rules
 iptables-save > /etc/iptables/rules.v4
 ip6tables-save > /etc/iptables/rules.v6
@@ -30,7 +34,7 @@ conn gateway-A-to-cloud
         rightsubnet=172.16.16.16/32
         ike=aes256-sha2_256-modp2048! 
         esp=aes256-sha2_256!
-        dpdaction=restart 
+        dpdaction=restart r 
         auto=start
 EOF
 
